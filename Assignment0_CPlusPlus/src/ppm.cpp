@@ -1,18 +1,38 @@
 #include "PPM.h"
+#include <fstream>
 
 // Constructor loads a filename with the .ppm extension
 PPM::PPM(std::string fileName){
-    // TODO:    Load and parse a ppm to get its pixel
-    //          data stored properly.
+    std::ifstream inFile;
+    inFile.open(fileName);
+
+    if (inFile.is_open()) {
+        std::string line;
+
+        if (getline(inFile, line)) {
+            m_width = std::stoi(line, nullptr, 10);
+        }
+
+        if (getline(inFile, line)) {
+            m_height = std::stoi(line, nullptr, 10);
+        }
+
+        m_PixelData = new unsigned char[m_width * m_height * 3];
+    }
+
+    inFile.close();
 }
 
 // Destructor clears any memory that has been allocated
-PPM::~PPM(){
+PPM::~PPM() {
+    delete[] m_PixelData;
 }
 
 // Saves a PPM Image to a new file.
 void PPM::savePPM(std::string outputFileName){
-    // TODO: Save a PPM image to disk
+    std::ofstream outFile;
+
+    outFile.open(outputFileName);
 }
 
 // Darken subtracts 50 from each of the red, green

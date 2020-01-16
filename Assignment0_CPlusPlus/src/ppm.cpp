@@ -45,5 +45,7 @@ void PPM::darken(){
 
 // Sets a pixel to a specific R,G,B value 
 void PPM::setPixel(int x, int y, int R, int G, int B){
-    // TODO: Implement
+    m_PixelData[((y * getWidth() + x) * 3)] = R;
+    m_PixelData[((y * getWidth() + x) * 3) + 1] = G;
+    m_PixelData[((y * getWidth() + x) * 3) + 2] = B;
 }

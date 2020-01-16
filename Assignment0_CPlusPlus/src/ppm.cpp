@@ -41,6 +41,18 @@ void PPM::savePPM(std::string outputFileName){
 // 0 in a ppm.
 void PPM::darken(){
     // TODO: Output a 'filtered' PPM image.
+
+
+    //decrements every pixel value by 50 with lower bound of zero.
+    for (int ii = 0; ii < getHeight() * getWidth() * 3; ii += 1) {
+
+        if (m_PixelData[ii] >= 50) {
+            m_PixelData[ii] -= 50;
+        }
+        else {
+            m_PixelData[ii] = 0;
+        }
+    }
 }
 
 // Sets a pixel to a specific R,G,B value 

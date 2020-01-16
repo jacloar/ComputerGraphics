@@ -9,7 +9,9 @@
 ## Modify this section
 
 - How many hours did it take you to complete this lab?
+  - The lab took approximately 1.5 hours of in-class work.
 - Did you collaborate with any other students/TAs/Professors?
+  - Yes, I briefly spoke with student around me and consulted professor Anderson for help.
 - Did you use any external resources? (Cite them below)
   - tbd
   - tbd

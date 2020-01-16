@@ -61,6 +61,9 @@ void drawLine(Vec2 v0, Vec2 v1, TGA& image, ColorRGB c){
     }
 }
 
+
+
+
 // Draw a triangle
 void triangle(Vec2 v0, Vec2 v1, Vec2 v2,TGA& image, ColorRGB c){
     if(glFillMode==LINE){
@@ -68,9 +71,36 @@ void triangle(Vec2 v0, Vec2 v1, Vec2 v2,TGA& image, ColorRGB c){
         drawLine(v1,v2,image,c);
         drawLine(v2,v0,image,c);
     }
-    // TODO: Draw a filled triangle
-}
 
+    // TODO: Draw a filled triangle
+
+    //A 
+    //steps (naive brute force):
+    // 1) create view box with bounds of triange
+    // 2) iterate over all pixels of view box
+    // 3) if pixel is inside triangle, set the pixel color
+    // 4) else, do nothing -
+
+
+    //B 
+    //more clever (like bfs)
+    //start at vertex
+    //move to adjacent 6 pixels
+    //for each adjacent pixel:
+    //  if pixel is inside triangle and un filled, color it and recur
+    //  else, do nothing
+
+    //C
+    //start at leftmost x coordinate
+    //traverse left to right for each pixel until reached right most pixel
+    //for each x-pixel, traverse on y axis and fill pixels inside triangle
+
+    //D
+    //find mid point of triangle and draw a line ot all edges
+    // this creates three new triangles
+    // do the same on each triangle
+    
+}
 
 
 // Main
@@ -85,7 +115,7 @@ int main(){
     Vec2 line[2] = {Vec2(0,0), Vec2(100,100)};
 
     // Set the fill mode
-    glPolygonMode(FILL);
+    glPolygonMode(LINE);
 
     // Draw a line
     drawLine(line[0],line[1],canvas,red);

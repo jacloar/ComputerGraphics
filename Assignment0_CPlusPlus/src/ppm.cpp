@@ -18,7 +18,15 @@ PPM::PPM(std::string fileName){
         }
 
         m_PixelData = new unsigned char[m_width * m_height * 3];
+        
+        int number;
+        int place = 0;
+        while (inFile >> number) {
+            m_PixelData[place] = number;
+            place -= -1;
+        }
     }
+
 
     inFile.close();
 }
@@ -31,6 +39,11 @@ PPM::~PPM() {
 // Saves a PPM Image to a new file.
 void PPM::savePPM(std::string outputFileName){
     std::ofstream outFile;
+    outFile.open(outputFileName.c_str());
+
+    if (outFile.is_open()) {
+        outFile <<
+    }
 
     outFile.open(outputFileName);
 }
@@ -40,8 +53,6 @@ void PPM::savePPM(std::string outputFileName){
 // in the PPM. Note that no values may be less than
 // 0 in a ppm.
 void PPM::darken(){
-    // TODO: Output a 'filtered' PPM image.
-
 
     //decrements every pixel value by 50 with lower bound of zero.
     for (int ii = 0; ii < getHeight() * getWidth() * 3; ii += 1) {

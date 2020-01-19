@@ -42,6 +42,7 @@ private:
     // Store width and height of image.
     int m_width{0};
     int m_height{0};
+    int maxPixValue{ 0 };
 };
 
 

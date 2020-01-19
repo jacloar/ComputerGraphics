@@ -1,7 +1,6 @@
 // Include our custom library
 #include "../include/PPM.h"
 #include "ppm.cpp"
-#include <iostream>
 
 int main(){
 

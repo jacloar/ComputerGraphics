@@ -1,9 +1,10 @@
 #include "../include/PPM.h"
-#include <fstream>
 #include <iostream>
+#include <fstream>
 
 // Constructor loads a filename with the .ppm extension
 PPM::PPM(std::string fileName){
+
     std::ifstream inFile;
     inFile.open(fileName.c_str());
 
@@ -13,10 +14,14 @@ PPM::PPM(std::string fileName){
         getline(inFile, line);
         getline(inFile, line);
         
+
+
         inFile >> m_width;
         inFile >> m_height;
+        inFile >> maxPixValue;
 
-        getline(inFile, line);
+
+       // getline(inFile, line);
 
         m_PixelData = new unsigned char[m_width * m_height * 3];
         int number;
@@ -24,6 +29,7 @@ PPM::PPM(std::string fileName){
         for (int ii = 0; ii < m_width * m_height * 3; ii += 1) {
             inFile >> number;
             m_PixelData[ii] = number;
+
         }
     }
 
@@ -44,10 +50,11 @@ void PPM::savePPM(std::string outputFileName){
     if (outFile.is_open()) {
         outFile << "P3" << std::endl;
         outFile << m_width << " " << m_height << std::endl;
-
+        outFile << maxPixValue << std::endl;
         for (int ii = 0; ii < getHeight() * getWidth() * 3; ii += 1) {
             outFile << (int) m_PixelData[ii] << std::endl;
         }
+        
     }
 
     outFile.close();
@@ -73,6 +80,7 @@ void PPM::darken(){
 
 // Sets a pixel to a specific R,G,B value 
 void PPM::setPixel(int x, int y, int R, int G, int B){
+
     m_PixelData[((y * getWidth() + x) * 3)] = R;
     m_PixelData[((y * getWidth() + x) * 3) + 1] = G;
     m_PixelData[((y * getWidth() + x) * 3) + 2] = B;

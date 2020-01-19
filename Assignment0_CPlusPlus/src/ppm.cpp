@@ -1,32 +1,31 @@
-#include "PPM.h"
+#include "../include/PPM.h"
 #include <fstream>
+#include <iostream>
 
 // Constructor loads a filename with the .ppm extension
 PPM::PPM(std::string fileName){
     std::ifstream inFile;
-    inFile.open(fileName);
+    inFile.open(fileName.c_str());
 
     if (inFile.is_open()) {
         std::string line;
 
-        if (getline(inFile, line)) {
-            m_width = std::stoi(line, nullptr, 10);
-        }
+        getline(inFile, line);
+        getline(inFile, line);
+        
+        inFile >> m_width;
+        inFile >> m_height;
 
-        if (getline(inFile, line)) {
-            m_height = std::stoi(line, nullptr, 10);
-        }
+        getline(inFile, line);
 
         m_PixelData = new unsigned char[m_width * m_height * 3];
-        
         int number;
-        int place = 0;
-        while (inFile >> number) {
-            m_PixelData[place] = number;
-            place -= -1;
+
+        for (int ii = 0; ii < m_width * m_height * 3; ii += 1) {
+            inFile >> number;
+            m_PixelData[ii] = number;
         }
     }
-
 
     inFile.close();
 }
@@ -47,7 +46,7 @@ void PPM::savePPM(std::string outputFileName){
         outFile << m_width << " " << m_height << std::endl;
 
         for (int ii = 0; ii < getHeight() * getWidth() * 3; ii += 1) {
-            outFile << m_PixelData[ii] << std::endl;
+            outFile << (int) m_PixelData[ii] << std::endl;
         }
     }
 

@@ -39,13 +39,19 @@ PPM::~PPM() {
 // Saves a PPM Image to a new file.
 void PPM::savePPM(std::string outputFileName){
     std::ofstream outFile;
+
     outFile.open(outputFileName.c_str());
 
     if (outFile.is_open()) {
-        outFile <<
+        outFile << "P3" << std::endl;
+        outFile << m_width << " " << m_height << std::endl;
+
+        for (int ii = 0; ii < getHeight() * getWidth() * 3; ii += 1) {
+            outFile << m_PixelData[ii] << std::endl;
+        }
     }
 
-    outFile.open(outputFileName);
+    outFile.close();
 }
 
 // Darken subtracts 50 from each of the red, green

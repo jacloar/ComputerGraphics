@@ -20,15 +20,14 @@ PPM::PPM(std::string fileName){
         inFile >> m_height;
         inFile >> maxPixValue;
 
-
-       // getline(inFile, line);
+        double scale = 255.0 / maxPixValue;
 
         m_PixelData = new unsigned char[m_width * m_height * 3];
         int number;
 
         for (int ii = 0; ii < m_width * m_height * 3; ii += 1) {
             inFile >> number;
-            m_PixelData[ii] = number;
+            m_PixelData[ii] = number * scale;
 
         }
     }
@@ -50,7 +49,7 @@ void PPM::savePPM(std::string outputFileName){
     if (outFile.is_open()) {
         outFile << "P3" << std::endl;
         outFile << m_width << " " << m_height << std::endl;
-        outFile << maxPixValue << std::endl;
+        outFile << 255 << std::endl;
         for (int ii = 0; ii < getHeight() * getWidth() * 3; ii += 1) {
             outFile << (int) m_PixelData[ii] << std::endl;
         }

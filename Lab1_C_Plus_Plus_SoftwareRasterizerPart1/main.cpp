@@ -106,12 +106,6 @@ void triangle(Vec2 v0, Vec2 v1, Vec2 v2,TGA& image, ColorRGB c){
     }
 
 
-    std::cout << std::endl << "left is " << left << std::endl;
-    std::cout << "right is " << right << std::endl;
-    std::cout << "bottom is " << bottom << std::endl;
-    std::cout << "top is " << top << std::endl;
-
-
     if (true) {
 
         for (int row = top; row <= bottom; row++) {

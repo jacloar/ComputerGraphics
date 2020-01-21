@@ -11,11 +11,15 @@
 ## Modify this section
 
 - How many hours did it take you to complete this lab?
+-  Worked for approximately 2-3 hours in and outside of class
 - Did you collaborate with any other students/TAs/Professors?
+- No
 - Did you use any external resources? (Cite them below)
-  - tbd
-  - tbd
+  - Yes, I looked up some of the math used to determine if a point is inside a triangle here
+  -http://www.crazyforcode.com/check-point-lies-triangle/
 - (Optional) What was your favorite part of the lab?
+- Learning c++ from almost nothing before and gaining knowledge witho some of its libraries and features
+  I ended up learning more than I used to work on this lab, but nonetheless I gained more c++ experience.
 - (Optional) How would you improve the lab?
 
 ## Logistics

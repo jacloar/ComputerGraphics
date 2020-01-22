@@ -11,10 +11,11 @@
 ## Modify this section
 
 - How many hours did it take you to complete this lab?
+  - About 1
 - Did you collaborate with any other students/TAs/Professors?
+  - No
 - Did you use any external resources? (Cite them below)
-  - tbd
-  - tbd
+  - http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html#pointintrianglearticle
 - (Optional) What was your favorite part of the lab?
 - (Optional) How would you improve the lab?
 

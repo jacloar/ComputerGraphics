@@ -18,7 +18,12 @@ struct Vector4f{
     // The "Real" constructor we want to use.
     // This initializes the values x,y,z
     Vector4f(float a, float b, float c, float d){
-      // TODO:
+      // TODO: - did work
+        x = a;
+        y = b;
+        z = c;
+        w = d;
+
     }
 
     // Index operator, allowing us to access the individual
@@ -40,27 +45,47 @@ struct Vector4f{
     // Multiplication Operator
     // Multiply vector by a uniform-scalar.
     Vector4f& operator *=(float s){
-        // TODO:
+        // TODO: - Did
+
+        //mutates 'this''s fields by the scalar, then returns (*this)
+
+        this->x *= s; //asm as *(this).x and x *= s
+        this->y *= s;
+        this->z *= s;
+        this->w *= s;
+
         return (*this);
     }
 
     // Division Operator
     Vector4f& operator /=(float s){
-        // TODO:
+        // TODO: -Did
+        this->x /= s; 
+        this->y /= s;
+        this->z /= s;
+        this->w /= s;
 
         return (*this);
     }
 
     // Addition operator
     Vector4f& operator +=(const Vector4f& v){
-        // TODO:
+        // TODO: - Did
+        this->x += v.x; 
+        this->y += v.y;
+        this->z += v.z;
+        this->w += v.w;
 
       return (*this);
     }
 
     // Subtraction operator
     Vector4f& operator -=(const Vector4f& v){
-        // TODO:
+        // TODO: - Did
+        this->x -= v.x;
+        this->y -= v.y;
+        this->z -= v.z;
+        this->w -= v.w;
 
       return (*this);
     }
@@ -69,8 +94,8 @@ struct Vector4f{
 
 // Compute the dot product of a Vector4f
 inline float Dot(const Vector4f& a, const Vector4f& b){
-  // TODO:
-  return 0;
+  // TODO: - Did
+  return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
 }
 
 // Multiplication of a vector by a scalar values
@@ -97,8 +122,8 @@ inline Vector4f operator -(const Vector4f& v){
 
 // Return the magnitude of a vector
 inline float Magnitude(const Vector4f& v){
-  // TODO:
-  return 0;
+  // TODO: - Did
+  return std::sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w);
 }
 
 // Add two vectors together
@@ -126,9 +151,11 @@ inline Vector4f Project(const Vector4f& a, const Vector4f& b){
 // Set a vectors magnitude to 1
 // Note: This is NOT generating a normal vector
 inline Vector4f Normalize(const Vector4f& v){
-  // TODO:
-  Vector4f vec;
-  return vec;
+  // TODO: - Did
+    float mag = Magnitude(v);
+    Vector4f vec;
+    vec /= mag;
+    return vec;
 }
 
 // a x b (read: 'a crossed b')

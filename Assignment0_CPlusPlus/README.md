@@ -3,12 +3,15 @@
 *TODO*: Please edit the following information in your assignment
 
 * Name and partners name (At most 1 partner for this assignment): 
+    - Name: Daniel Muller
+    - Partner: Jack (John) Loar
 * How many hours did it take you to complete this assignment? 
+    - About 3 hours give or take
 * Did you collaborate or share ideas with any other students/TAs/Professors? 
+    - Only with partner
 * Did you use any external resources? 
-  * (tbd if any)
-  * (tbd if any)
-  * (tbd if any)
+  * Used resources for c++ language features and syntax, such as readind and writing to files
+    *cplusplus.com
 * (Optional) What was the most interesting part of the assignment? How would you improve this assignment?
   
 ## Description

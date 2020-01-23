@@ -1,4 +1,6 @@
 #include "StarList.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 StarList::StarList(unsigned int numStars, float spread, float speed) : spread_(spread), speed_(speed)
 {
@@ -47,11 +49,17 @@ void StarList::updateAndRender(QImage& image, float delta, const QSize& windowSi
         }
 
         // TODO: Modify me!!
-        float givePerspective = 1;
+
+        int p = 70;//field of view parameter 
+        float tanMod = tan(p * M_PI / 180) / 2;
+
+        float givePerspective = tanMod * stars_[i].z; //= tanMod * stars_z
+        //divide x and y by half the tangent of z
+       
 
         // Apply our perspective
-        int x = (int)((stars_[i].x / (givePerspective)) * halfWidth + halfWidth);
-        int y = (int)((stars_[i].y / (givePerspective)) * halfHeight + halfHeight);
+        int x = (int) (( (stars_[i].x / (givePerspective)) * halfWidth + halfWidth));
+        int y = (int)(((stars_[i].y / (givePerspective)) * halfHeight + halfHeight));
 
         // Reinitialize a star
         if (x <0 || x >= windowSize.width()) {

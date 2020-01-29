@@ -16,8 +16,6 @@
 
 // Load our libraries
 #include <iostream>
-#include <algorithm>
-#include <vector>
 
 // Some define values
 #define WINDOW_HEIGHT 320
@@ -34,7 +32,7 @@
 
 // Create a canvas to draw on.
 TGA canvas(WINDOW_WIDTH,WINDOW_HEIGHT);
-bool validPixel(int x, int y, Vec2 v0, Vec2 v1, Vec2 v2);
+
 
 // Implementation of Bresenham's Line Algorithm
 // The input to this algorithm is two points and a color
@@ -63,89 +61,76 @@ void drawLine(Vec2 v0, Vec2 v1, TGA& image, ColorRGB c){
     }
 }
 
+int maxEl(int* arr, int len) {
+    int max = 0;
+    if (len > 0) {
+        max = arr[0];
+    }
 
+    for (int i = 1; i < len; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
 
+    return max;
+}
 
+int minEl(int* arr, int len) {
+    int min = 0;
+    if (len > 0) {
+        min = arr[0];
+    }
 
+    for (int i = 1; i < len; i++) {
+        if (arr[i] < min) {
+            min = arr[i];
+        }
+    }
+
+    return min;
+}
+
+// perpDotProduct(v1, v2) = vx1 * vy2 - vy1 * vx2
+int crossProduct(Vec2 v0, Vec2 v1) {
+    return v0.x * v1.y - v0.y * v1.x;
+}
 
 // Draw a triangle
-void triangle(Vec2 v0, Vec2 v1, Vec2 v2,TGA& image, ColorRGB c){
-   
-    if(glFillMode==LINE || true){
+void triangle(Vec2 v0, Vec2 v1, Vec2 v2, TGA& image, ColorRGB c){
+    if(glFillMode==LINE){
         drawLine(v0,v1,image,c);
         drawLine(v1,v2,image,c);
         drawLine(v2,v0,image,c);
     }
+    else {
+        int xs[3] = { v0.x, v1.x, v2.x };
+        int ys[3] = { v0.y, v1.y, v2.y };
 
-    // TODO: Draw a filled triangle
-    std::vector<Vec2> triVec;
+        int maxX = maxEl(xs, 3);
+        int maxY = maxEl(ys, 3);
+        int minX = minEl(xs, 3);
+        int minY = minEl(ys, 3);
 
-    triVec.push_back(v0);
-    triVec.push_back(v1);
-    triVec.push_back(v2);
+        Vec2 vs0 = Vec2(v1.x - v0.x, v1.y - v0.y);
+        Vec2 vs1 = Vec2(v2.x - v0.x, v2.y - v0.y);
 
-    //boundaries to iterate over box to fill
-    int left = v0.x; //leftmost x value to be set
-    int right = v0.x; //rightmost x value to be set
-    int top = v0.y; //uppermost y value to be set
-    int bottom = v0.y; //uppermost y value to be set
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                Vec2 q = Vec2(x - v0.x, y - v0.y);
 
-    for (Vec2 &v : triVec) {
-        if (v.x < left) {
-            left = v.x;
-        }
-        if (v.x > right) {
-            right = v.x;
-        }
-        if (v.y > bottom) {
-            bottom = v.y;
-        }
-        if (v.y < top) {
-            top = v.y;
-        }
-    }
+                float s = (float) crossProduct(q, vs1) / crossProduct(vs0, vs1);
+                float t = (float) crossProduct(vs0, q) / crossProduct(vs0, vs1);
 
-
-    if (true) {
-
-        for (int row = top; row <= bottom; row++) {
-            for (int col = left; col <= right; col++) {
-
-                if (validPixel(row, col, v0, v1, v2)) {
-                    canvas.setPixelColor(row, col, c);
+                if (s >= 0 && t >= 0 && s + t <= 1) {
+                    canvas.setPixelColor(x, y, c);
                 }
-
-
             }
         }
     }
-
-    
 }
 
 
-//returns the area of a triangle define by three points
-float area(int x1, int y1, int x2, int y2, int x3, int y3) {
-
-    return abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
-
-}
-
-//test in the point (x,y) is inside the triandle define by v0,v1 and v2
-bool validPixel(int x, int y, Vec2 v0, Vec2 v1, Vec2 v2) {
-
-
-    float mainArea = area(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
-
-    float a1 = area(x, y, v1.x, v1.y, v2.x, v2.y);
-
-    float a2 = area(v0.x, v0.y, x, y, v2.x, v2.y);
-
-    float a3 = area(v0.x, v0.y, v1.x, v1.y, x, y);
-
-    return (mainArea == a1 + a2 + a3);
-
-}
 
 // Main
 int main(){
@@ -153,7 +138,12 @@ int main(){
     // A sample of color(s) to play with
     ColorRGB red;
     red.r = 255; red.g = 0; red.b = 0;
-        
+    
+    ColorRGB blue;
+    blue.r = 0; blue.g = 0; blue.b = 255;
+
+    ColorRGB green;
+    green.r = 0; green.g = 255; green.b = 0;
     
     // Points for our Line
     Vec2 line[2] = {Vec2(0,0), Vec2(100,100)};
@@ -165,10 +155,12 @@ int main(){
     drawLine(line[0],line[1],canvas,red);
 
     // Data for our triangle
-    Vec2 tri[3] = {Vec2(160,60),Vec2(15,50),Vec2(75,190)};
+    Vec2 tri[3] = {Vec2(160,60),Vec2(150,10),Vec2(75,190)};
 
     // Draw a triangle
     triangle(tri[0],tri[1],tri[2],canvas,red);
+    triangle(Vec2(20, 200), Vec2(200, 280), Vec2(100, 260), canvas, blue);
+    triangle(Vec2(200, 150), Vec2(150, 200), Vec2(250, 200), canvas, green);
 
     // Output the final image
     canvas.outputTGAImage("graphics_lab2.ppm");

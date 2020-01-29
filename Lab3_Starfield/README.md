@@ -12,14 +12,11 @@
 ## Modify this section
 
 - How many hours did it take you to complete this lab?
-  - About thirty minutes
+  - About 1
 - Did you collaborate with any other students/TAs/Professors?
-	- Yes, I colaborated with prof Anderson to help compile and run my program, and
-	with peers to discuss the math and calculations
+  - Got hint from Professor Anderson about how to set FOV
 - Did you use any external resources? (Cite them below)
-  - slides only 
 - (Optional) What was your favorite part of the lab?
-	- seeing the outcome of the strs on the screen and being able to manipulate the scence.
 - (Optional) How would you improve the lab?
 
 ## Logistics

@@ -7,14 +7,12 @@
 *TODO*: Please edit the following information in your assignment
 
 * Name and partners name (At most 1 partner for this assignment): 
-    - Name: Daniel Muller
-    -Partner Jack (John) Loar
+    - Name: Jack Loar
+    - Partner: Dan Muller
 * How many hours did it take you to complete this assignment? 
+	- About 4
 * Did you collaborate or share ideas with any other students/TAs/Professors? 
 * Did you use any external resources? 
-  * (tbd if any)
-  * (tbd if any)
-  * (tbd if any)
 * (Optional) What was the most interesting part of the assignment? How would you improve this assignment?
 
 ## Logistics

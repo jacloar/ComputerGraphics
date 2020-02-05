@@ -10,7 +10,9 @@
     - Name: Daniel Muller
     -Partner Jack (John) Loar
 * How many hours did it take you to complete this assignment? 
+    - About 6 hours
 * Did you collaborate or share ideas with any other students/TAs/Professors? 
+    - Just partner
 * Did you use any external resources? 
   * (tbd if any)
   * (tbd if any)

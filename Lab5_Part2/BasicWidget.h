@@ -21,6 +21,8 @@ private:
   void createShader();
   QOpenGLVertexArrayObject vao_;
 
+  int sp = 6;
+
 protected:
   // Required interaction overrides
   void keyReleaseEvent(QKeyEvent* keyEvent) override;

@@ -11,10 +11,11 @@
 ## Modify this section
 
 - How many hours did it take you to complete this lab?
+  - About 2
 - Did you collaborate with any other students/TAs/Professors?
+  - Worked with John Philip, Judy Wong. Got help from Erik Anderson
 - Did you use any external resources? (Cite them below)
-  - tbd
-  - tbd
+  - QT docs
 - (Optional) What was your favorite part of the lab?
 - (Optional) How would you improve the lab?
 

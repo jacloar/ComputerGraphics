@@ -103,10 +103,10 @@ void ObjReader::readFace(std::string line) {
 
 	sscanf(line.c_str(), "f %d//%d %d//%d %d//%d", &v1, &n1, &v2, &n2, &v3, &n3);
 
-	faces.push_back(v1);
-	faces.push_back(n1);
-	faces.push_back(v2);
-	faces.push_back(n2);
-	faces.push_back(v3);
-	faces.push_back(n3);
+	faces.push_back(v1 - 1);
+	//faces.push_back(n1);
+	faces.push_back(v2 - 1);
+	//faces.push_back(n2);
+	faces.push_back(v3 - 1);
+	//faces.push_back(n3);
 }

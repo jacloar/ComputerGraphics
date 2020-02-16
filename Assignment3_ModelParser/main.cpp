@@ -17,28 +17,6 @@ int main(int argc, char** argv) {
 
     ObjReader r("../objects/cube.obj");
     
-
-    /*
-    std::cout << "vertices: \n";
-    for (int i = 0; i < r.vertices.size(); i++) {
-        std::cout << r.vertices.at(i) << std::endl;
-    }
-
-    std::cout << "\n normals: \n";
-    for (int i = 0; i < r.normals.size(); i++) {
-        std::cout << r.normals.at(i) << std::endl;
-    }
-    */
-
-    std::cout << "\n faces: \n";
-    for (int i = 0; i < r.faces.size(); i++) {
-        std::cout << r.faces.at(i) << std::endl;
-    }
-
-  
-
-
-
   QApplication a(argc, argv);
   QString appDir = a.applicationDirPath();
   QDir::setCurrent(appDir);

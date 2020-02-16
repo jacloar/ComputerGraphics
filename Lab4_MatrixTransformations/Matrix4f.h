@@ -4,6 +4,7 @@
 
 class Matrix4f{
 public:
+
     // Initializes an identity matrix
     Matrix4f(){
         Identity();

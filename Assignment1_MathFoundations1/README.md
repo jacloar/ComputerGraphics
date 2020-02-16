@@ -10,8 +10,13 @@
     - Name: Jack Loar
     - Partner: Dan Muller
 * How many hours did it take you to complete this assignment? 
+<<<<<<< HEAD
 	- About 4
+=======
+    - About 6 hours
+>>>>>>> dan/assignment-3
 * Did you collaborate or share ideas with any other students/TAs/Professors? 
+    - Just partner
 * Did you use any external resources? 
 * (Optional) What was the most interesting part of the assignment? How would you improve this assignment?
 

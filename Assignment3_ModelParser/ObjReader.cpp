@@ -8,28 +8,37 @@
 
 ObjReader::ObjReader() {
 
-	QVector<float> vertices();
-	QVector<float> normals();
-	QVector<unsigned int> faces();
+	QVector<float> vertices;
+	QVector<float> normals;
+	QVector<unsigned int> faces;
 
 }
 
 ObjReader::ObjReader(std::string fileName) {
+
+	//std::cout << " con " << std::endl;
 	
-	ObjReader();
+	QVector<float> vertices;
+	QVector<float> normals;
+	QVector<unsigned int> faces;
+
 	readFile(fileName);
 
 }
 
 
 void ObjReader::readFile(std::string fileName) {
-	//TODO
 
 	std::ifstream inFile;
 	inFile.open(fileName.c_str());
 
+	//std::cout << " readFile " << std::endl;
+
 
 	if (inFile.is_open()) {
+
+		//std::cout << " file open " << std::endl;
+
 
 		while (!inFile.eof()) {
 
@@ -37,17 +46,21 @@ void ObjReader::readFile(std::string fileName) {
 
 			getline(inFile, line);
 
-			if (line.at(0) == 'v') {
-				if (line.at(1) == 'n' && line.at(2) == ' ') {
-					readNormal(line);
-				}
-				else if (line.at(1) == ' ') {
-					readVertex(line);
-				}
-			}
+			if (line.length() > 3) {
 
-			if (line.at(0) == 'f' && line.at(1) == ' ') {
-				readFace(line);
+				if (line.at(0) == 'v') {
+					if (line.at(1) == 'n') {
+						readNormal(line);
+					}
+					else if (line.at(1) == ' ') {
+						readVertex(line);
+					}
+					continue;
+				}
+
+				if (line.at(0) == 'f' && line.at(1) == ' ') {
+					readFace(line);
+				}
 			}
 
 		}
@@ -60,7 +73,7 @@ void ObjReader::readVertex(std::string line) {
 	float v2;
 	float v3;
 
-	sscanf(line.c_str, "v %f %f %f", &v1, &v2, &v3);
+	sscanf(line.c_str(), "v %f %f %f", &v1, &v2, &v3);
 
 	vertices.push_back(v1);
 	vertices.push_back(v2);
@@ -73,7 +86,7 @@ void ObjReader::readNormal(std::string line) {
 	float v2;
 	float v3;
 
-	sscanf(line.c_str, "vn %f %f %f", &v1, &v2, &v3);
+	sscanf(line.c_str(), "vn %f %f %f", &v1, &v2, &v3);
 
 	normals.push_back(v1);
 	normals.push_back(v2);
@@ -88,7 +101,7 @@ void ObjReader::readFace(std::string line) {
 	unsigned int v3;
 	unsigned int n3;
 
-	sscanf(line.c_str, "f %d//%d %d//%d %d//%d", &v1, &n1, &v2, &n2, &v3, &n3);
+	sscanf(line.c_str(), "f %d//%d %d//%d %d//%d", &v1, &n1, &v2, &n2, &v3, &n3);
 
 	faces.push_back(v1);
 	faces.push_back(n1);

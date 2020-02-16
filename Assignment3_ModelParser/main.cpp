@@ -5,11 +5,18 @@
 #include <QtCore>
 #include <QtGui>
 #include <QtOpenGL>
+#include <stdio.h>
+#include <iostream>
+
 
 // Lab application
 #include "Application.h"
+#include "ObjReader.h"
 
 int main(int argc, char** argv) {
+
+  //ObjReader r("../objects/monkey.obj");
+    
   QApplication a(argc, argv);
   QString appDir = a.applicationDirPath();
   QDir::setCurrent(appDir);

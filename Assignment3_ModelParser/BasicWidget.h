@@ -3,6 +3,7 @@
 #include <QtGui>
 #include <QtWidgets>
 #include <QtOpenGL>
+
 #include "ObjReader.h"
 
 /**
@@ -10,33 +11,37 @@
  */
 class BasicWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
-  Q_OBJECT
+    Q_OBJECT
 
 private:
     QString vertexShaderString() const;
     QString fragmentShaderString() const;
     void createShader();
-
     QOpenGLVertexArrayObject vao_;
+    int shape = 6;
+
     ObjReader obj;
 
 protected:
-  // Required interaction overrides
-  void keyReleaseEvent(QKeyEvent* keyEvent) override;
+    // Required interaction overrides
+    void keyReleaseEvent(QKeyEvent* keyEvent) override;
 
-  // Required overrides form QOpenGLWidget
-  void initializeGL() override;
-  void resizeGL(int w, int h) override;
-  void paintGL() override;
+    // Required overrides form QOpenGLWidget
+    void initializeGL() override;
+    void resizeGL(int w, int h) override;
+    void paintGL() override;
 
-  QOpenGLBuffer vbo_;
-  QOpenGLBuffer ibo_;
-  QOpenGLShaderProgram shaderProgram_;
+    QOpenGLBuffer vbo_;
+    QOpenGLBuffer ibo_;
+    QOpenGLShaderProgram shaderProgram_;
+
+
 
 public:
-  BasicWidget(QWidget* parent=nullptr);
-  virtual ~BasicWidget();
-  
-  // Make sure we have some size that makes sense.
-  QSize sizeHint() const {return QSize(800,600);}
+    BasicWidget(QWidget* parent = nullptr);
+    virtual ~BasicWidget();
+
+    // Make sure we have some size that makes sense.
+    QSize sizeHint() const { return QSize(800, 600); }
+    void setObj(ObjReader r);
 };

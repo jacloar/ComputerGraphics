@@ -15,7 +15,7 @@
 
 int main(int argc, char** argv) {
 
-    ObjReader r("../objects/cube.obj");
+  //ObjReader r("../objects/monkey.obj");
     
   QApplication a(argc, argv);
   QString appDir = a.applicationDirPath();

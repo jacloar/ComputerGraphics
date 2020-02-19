@@ -5,25 +5,31 @@
 #include <stdio.h>
 #include <string.h>
 
-
 ObjReader::ObjReader() {
-
-	QVector<float> vertices;
-	QVector<float> normals;
-	QVector<unsigned int> faces;
 
 }
 
 ObjReader::ObjReader(std::string fileName) {
 
-	//std::cout << " con " << std::endl;
-	
-	QVector<float> vertices;
-	QVector<float> normals;
-	QVector<unsigned int> faces;
-
 	readFile(fileName);
+	
+	std::cout << "verts: " << std::endl;
+	for (int i = 0; i < vertices.size(); i += 1) {
+		std::cout << vertices.at(i) << ", ";
+	}
 
+	std::cout << "faces: " << std::endl;
+	for (int i = 0; i < faces.size(); i += 1) {
+		std::cout << faces.at(i) << ", ";
+	}
+}
+
+QVector<float> ObjReader::getVertices() {
+	return vertices;
+}
+
+QVector<unsigned int> ObjReader::getFaces() {
+	return faces;
 }
 
 
@@ -32,18 +38,10 @@ void ObjReader::readFile(std::string fileName) {
 	std::ifstream inFile;
 	inFile.open(fileName.c_str());
 
-	//std::cout << " readFile " << std::endl;
-
-
 	if (inFile.is_open()) {
-
-		//std::cout << " file open " << std::endl;
-
-
 		while (!inFile.eof()) {
 
 			std::string line;
-
 			getline(inFile, line);
 
 			if (line.length() > 3) {

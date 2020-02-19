@@ -1,11 +1,12 @@
 #include "BasicWidget.h"
-
+#include <iostream>
 
 //////////////////////////////////////////////////////////////////////
 // Publics
 BasicWidget::BasicWidget(QWidget* parent) : QOpenGLWidget(parent), vbo_(QOpenGLBuffer::VertexBuffer), ibo_(QOpenGLBuffer::IndexBuffer)
 {
-  setFocusPolicy(Qt::StrongFocus);
+    setFocusPolicy(Qt::StrongFocus);
+    ObjReader obj("../objects/cube.obj");
 }
 
 BasicWidget::~BasicWidget()
@@ -16,6 +17,10 @@ BasicWidget::~BasicWidget()
     ibo_.destroy();
     vao_.release();
     vao_.destroy();
+}
+
+void BasicWidget::setObj(ObjReader r) {
+    obj = r;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -39,11 +44,10 @@ QString BasicWidget::fragmentShaderString() const
 {
     QString str =
         "#version 330\n"
-        "in vec4 vertColor;\n"
         "out vec4 color;\n"
         "void main()\n"
         "{\n"
-        "  color = vertColor;\n"
+        "  color = vec4(0.0f, 1.0f, 1.0f, 1.0f);\n"
         "}\n";
     return str;
 }
@@ -67,19 +71,27 @@ void BasicWidget::createShader()
         qDebug() << shaderProgram_.log();
     }
 }
-
-ObjReader obj("../objects/bunny.obj");
-
 ///////////////////////////////////////////////////////////////////////
 // Protected
 void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent)
 {
-  // TODO
-  // Handle key events here.
-  qDebug() << "You Pressed an unsupported Key!";
-  // ENDTODO
+    // TODO
+    // Handle key events here.
+    if (keyEvent->key() == Qt::Key_Left) {
+        // qDebug() << "Left Arrow Pressed";
+        shape = 3;
+        update();  // We call update after we handle a key press to trigger a redraw when we are ready
+    }
+    else if (keyEvent->key() == Qt::Key_Right) {
+        // qDebug() << "Right Arrow Pressed";
+        shape = 6;
+        update();  // We call update after we handle a key press to trigger a redraw when we are ready
+    }
+    else {
+        qDebug() << "You Pressed an unsupported Key!";
+    }
+    // ENDTODO
 }
-
 void BasicWidget::initializeGL()
 {
     makeCurrent();
@@ -97,35 +109,69 @@ void BasicWidget::initializeGL()
     // Set up our shaders.
     createShader();
 
-  shaderProgram_.bind();
-  vbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
-  vbo_.create();
-  // Bind our vbo inside our vao
-  vbo_.bind();
-  vbo_.allocate(obj.vertices.data(), obj.vertices.size() * sizeof(GL_FLOAT));
+    // TODO:  Add vertex and index data to draw two triangles
+    // Define our verts
+    static const GLfloat verts[12] =
+    {
+      -0.8f, -0.8f, 0.0f, // Left vertex position
+      0.8f, -0.8f, 0.0f,  // right vertex position
+      -0.8f,  0.8f, 0.0f,  // Top vertex position
+      0.8f, 0.8f, 0.0f
+    };
+    // Define our vert colors
+    static GLfloat colors[16] =
+    {
+        0.5f, 0.0f, 0.0f, 1.0f, // red
+        0.0f, 1.0f, 0.0f, 1.0f, // green
+        0.0f, 0.0f, 1.0f, 1.0f, // blue
+        1.0f, 1.0f, 0.0f, 0.25f  // yellow
+    };
+    // Define our indices
+    static GLuint idx[6] =
+    {
+        0, 1, 2, 2, 1, 3
+    };
+    // ENDTODO
+    ObjReader obj;
 
-  ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
-  ibo_.create();
-  ibo_.bind();
-  ibo_.allocate(obj.faces.data(), obj.faces.size() * sizeof(GL_INT));
+    std::cout << "verts: " << std::endl;
+    for (int i = 0; i < obj.vertices.size(); i += 1) {
+        std::cout << obj.vertices.at(i) << ", ";
+    }
 
-  vao_.create();
-  vao_.bind();
-  vbo_.bind();
-  shaderProgram_.enableAttributeArray(0);
-  shaderProgram_.setAttributeBuffer(0, GL_FLOAT, 0, 3);
+    // Set up our buffers and our vao
+  // Temporary bind of our shader.
+    shaderProgram_.bind();
+    // Create and prepare a vbo
+    vbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbo_.create();
+    vbo_.bind();
+    vbo_.allocate(obj.getVertices().data(), obj.getVertices().size() * sizeof(GL_FLOAT));
 
-  ibo_.bind();
-  vao_.release();
-  vbo_.release();
-  shaderProgram_.release();
+    // TODO:  Generate our index buffer
+    ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    ibo_.create();
+    ibo_.bind();
+    ibo_.allocate(obj.getFaces().data(), obj.getFaces().size() * sizeof(GL_INT));
+    // ENDTODO
 
-  glViewport(0, 0, width(), height());
+    // Create a VAO to keep track of things for us.
+    vao_.create();
+    vao_.bind();
+    vbo_.bind();
+    shaderProgram_.enableAttributeArray(0);
+    shaderProgram_.setAttributeBuffer(0, GL_FLOAT, 0, 3);
+
+    ibo_.bind();
+    // Releae the vao THEN the vbo
+    vao_.release();
+    shaderProgram_.release();
+    glViewport(0, 0, width(), height());
 }
 
 void BasicWidget::resizeGL(int w, int h)
 {
-  glViewport(0, 0, w, h);
+    glViewport(0, 0, w, h);
 }
 
 void BasicWidget::paintGL()
@@ -136,9 +182,11 @@ void BasicWidget::paintGL()
     glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  shaderProgram_.bind();
-  vao_.bind();
-  glDrawElements(GL_TRIANGLES, obj.faces.size() * 3, GL_UNSIGNED_INT, 0);
-  vao_.release();
-  shaderProgram_.release();
+    shaderProgram_.bind();
+    vao_.bind();
+    // TODO: Change number of indices drawn
+    glDrawElements(GL_TRIANGLES, 6 * 3, GL_UNSIGNED_INT, 0);
+    // ENDTODO
+    vao_.release();
+    shaderProgram_.release();
 }

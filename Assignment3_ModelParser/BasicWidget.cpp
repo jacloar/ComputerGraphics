@@ -84,6 +84,9 @@ void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent)
         showBunny = false;
         update();
     }
+    else if (keyEvent->key() == Qt::Key_Q) {
+        exit(0);
+    }
     else {
         qDebug() << "You Pressed an unsupported Key!";
     }

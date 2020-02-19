@@ -3,7 +3,7 @@
 
 //////////////////////////////////////////////////////////////////////
 // Publics
-BasicWidget::BasicWidget(QWidget* parent) : QOpenGLWidget(parent), vbo_(QOpenGLBuffer::VertexBuffer), ibo_(QOpenGLBuffer::IndexBuffer)
+BasicWidget::BasicWidget(QWidget* parent) : QOpenGLWidget(parent), b_vbo_(QOpenGLBuffer::VertexBuffer), b_ibo_(QOpenGLBuffer::IndexBuffer), m_vbo_(QOpenGLBuffer::VertexBuffer), m_ibo_(QOpenGLBuffer::IndexBuffer)
 {
     setFocusPolicy(Qt::StrongFocus);
     
@@ -11,10 +11,14 @@ BasicWidget::BasicWidget(QWidget* parent) : QOpenGLWidget(parent), vbo_(QOpenGLB
 
 BasicWidget::~BasicWidget()
 {
-    vbo_.release();
-    vbo_.destroy();
-    ibo_.release();
-    ibo_.destroy();
+    b_vbo_.release();
+    b_vbo_.destroy();
+    b_ibo_.release();
+    b_ibo_.destroy();
+    m_vbo_.release();
+    m_vbo_.destroy();
+    m_ibo_.release();
+    m_ibo_.destroy();
     vao_.release();
     vao_.destroy();
 }
@@ -71,22 +75,18 @@ void BasicWidget::createShader()
 // Protected
 void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent)
 {
-    // TODO
     // Handle key events here.
-    if (keyEvent->key() == Qt::Key_Left) {
-        qDebug() << "Left Arrow Pressed";
-        obj = bunny;
-        update();  // We call update after we handle a key press to trigger a redraw when we are ready
+    if (keyEvent->key() == Qt::Key_1) {
+        showBunny = true;
+        update();
     }
-    else if (keyEvent->key() == Qt::Key_Right) {
-        qDebug() << "Right Arrow Pressed";
-        obj = monkey;
-        update();  // We call update after we handle a key press to trigger a redraw when we are ready
+    else if (keyEvent->key() == Qt::Key_2) {
+        showBunny = false;
+        update();
     }
     else {
         qDebug() << "You Pressed an unsupported Key!";
     }
-    // ENDTODO
 }
 void BasicWidget::initializeGL()
 {
@@ -106,27 +106,37 @@ void BasicWidget::initializeGL()
     createShader();
 
     // Set up our buffers and our vao
-  // Temporary bind of our shader.
+    // Temporary bind of our shader.
     shaderProgram_.bind();
     // Create and prepare a vbo
-    vbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    vbo_.create();
-    vbo_.bind();
-    vbo_.allocate(obj.getVertices().data(), obj.getVertices().size() * sizeof(GL_FLOAT));
+    b_vbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    b_vbo_.create();
+    b_vbo_.bind();
+    b_vbo_.allocate(bunny.getVertices().data(), bunny.getVertices().size() * sizeof(GL_FLOAT));
 
-    ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    ibo_.create();
-    ibo_.bind();
-    ibo_.allocate(obj.getFaces().data(), obj.getFaces().size() * sizeof(GL_INT));
+    b_ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    b_ibo_.create();
+    b_ibo_.bind();
+    b_ibo_.allocate(bunny.getFaces().data(), bunny.getFaces().size() * sizeof(GL_INT));
+
+    m_vbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_vbo_.create();
+    m_vbo_.bind();
+    m_vbo_.allocate(monkey.getVertices().data(), monkey.getVertices().size() * sizeof(GL_FLOAT));
+
+    m_ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_ibo_.create();
+    m_ibo_.bind();
+    m_ibo_.allocate(monkey.getFaces().data(), monkey.getFaces().size() * sizeof(GL_INT));
 
     // Create a VAO to keep track of things for us.
     vao_.create();
     vao_.bind();
-    vbo_.bind();
+    b_vbo_.bind();
     shaderProgram_.enableAttributeArray(0);
     shaderProgram_.setAttributeBuffer(0, GL_FLOAT, 0, 3);
 
-    ibo_.bind();
+    b_ibo_.bind();
     // Releae the vao THEN the vbo
     vao_.release();
     shaderProgram_.release();
@@ -149,16 +159,25 @@ void BasicWidget::paintGL()
     shaderProgram_.bind();
     vao_.bind();
 
-    vbo_.bind();
-    vbo_.allocate(obj.getVertices().data(), obj.getVertices().size() * sizeof(GL_FLOAT));
+    if (showBunny) {
+        b_vbo_.bind();
+        shaderProgram_.enableAttributeArray(0);
+        shaderProgram_.setAttributeBuffer(0, GL_FLOAT, 0, 3);
 
-    ibo_.bind();
-    ibo_.allocate(obj.getFaces().data(), obj.getFaces().size() * sizeof(GL_INT));
+        b_ibo_.bind();
 
-    shaderProgram_.enableAttributeArray(0);
-    shaderProgram_.setAttributeBuffer(0, GL_FLOAT, 0, 3);
+        glDrawElements(GL_TRIANGLES, bunny.getFaces().size(), GL_UNSIGNED_INT, 0);
+    }
+    else {
+        m_vbo_.bind();
+        shaderProgram_.enableAttributeArray(0);
+        shaderProgram_.setAttributeBuffer(0, GL_FLOAT, 0, 3);
 
-    glDrawElements(GL_TRIANGLES, obj.faces.size(), GL_UNSIGNED_INT, 0);
+        m_ibo_.bind();
+
+        glDrawElements(GL_TRIANGLES, monkey.getFaces().size(), GL_UNSIGNED_INT, 0);
+    }
+    
     vao_.release();
     shaderProgram_.release();
 }

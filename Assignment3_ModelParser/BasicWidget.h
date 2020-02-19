@@ -21,7 +21,9 @@ private:
     
     ObjReader bunny = ObjReader("../../objects/bunny_centered.obj");
     ObjReader monkey = ObjReader("../../objects/monkey_centered.obj");
-    ObjReader obj = bunny;
+    ObjReader obj;
+    
+    boolean showBunny = true;
 
 protected:
     // Required interaction overrides
@@ -32,8 +34,10 @@ protected:
     void resizeGL(int w, int h) override;
     void paintGL() override;
 
-    QOpenGLBuffer vbo_;
-    QOpenGLBuffer ibo_;
+    QOpenGLBuffer b_vbo_;
+    QOpenGLBuffer b_ibo_;
+    QOpenGLBuffer m_vbo_;
+    QOpenGLBuffer m_ibo_;
     QOpenGLShaderProgram shaderProgram_;
 
 

@@ -5,9 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-ObjReader::ObjReader() {
-
-}
+ObjReader::ObjReader() {}
 
 ObjReader::ObjReader(std::string fileName) {
 	readFile(fileName);

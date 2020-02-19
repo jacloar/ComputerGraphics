@@ -74,12 +74,12 @@ void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent)
     // TODO
     // Handle key events here.
     if (keyEvent->key() == Qt::Key_Left) {
-        // qDebug() << "Left Arrow Pressed";
+        qDebug() << "Left Arrow Pressed";
         obj = bunny;
         update();  // We call update after we handle a key press to trigger a redraw when we are ready
     }
     else if (keyEvent->key() == Qt::Key_Right) {
-        // qDebug() << "Right Arrow Pressed";
+        qDebug() << "Right Arrow Pressed";
         obj = monkey;
         update();  // We call update after we handle a key press to trigger a redraw when we are ready
     }
@@ -104,26 +104,6 @@ void BasicWidget::initializeGL()
 
     // Set up our shaders.
     createShader();
-    // Define our verts
-    static const GLfloat verts[12] =
-    {
-      -0.8f, -0.8f, 0.0f, // Left vertex position
-      0.8f, -0.8f, 0.0f,  // right vertex position
-      -0.8f,  0.8f, 0.0f,  // Top vertex position
-      0.8f, 0.8f, 0.0f
-    };
-    // Define our indices
-    static GLuint idx[6] =
-    {
-        0, 1, 2, 2, 1, 3
-    };
-    // ENDTODO
-/*
-    std::cout << "verts: " << std::endl;
-    for (int i = 0; i < data.vertices.size(); i += 1) {
-        std::cout << data.vertices.at(i) << ", ";
-    }
-    */
 
     // Set up our buffers and our vao
   // Temporary bind of our shader.
@@ -134,12 +114,10 @@ void BasicWidget::initializeGL()
     vbo_.bind();
     vbo_.allocate(obj.getVertices().data(), obj.getVertices().size() * sizeof(GL_FLOAT));
 
-    // TODO:  Generate our index buffer
     ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
     ibo_.create();
     ibo_.bind();
     ibo_.allocate(obj.getFaces().data(), obj.getFaces().size() * sizeof(GL_INT));
-    // ENDTODO
 
     // Create a VAO to keep track of things for us.
     vao_.create();
@@ -170,9 +148,17 @@ void BasicWidget::paintGL()
 
     shaderProgram_.bind();
     vao_.bind();
-    // TODO: Change number of indices drawn
+
+    vbo_.bind();
+    vbo_.allocate(obj.getVertices().data(), obj.getVertices().size() * sizeof(GL_FLOAT));
+
+    ibo_.bind();
+    ibo_.allocate(obj.getFaces().data(), obj.getFaces().size() * sizeof(GL_INT));
+
+    shaderProgram_.enableAttributeArray(0);
+    shaderProgram_.setAttributeBuffer(0, GL_FLOAT, 0, 3);
+
     glDrawElements(GL_TRIANGLES, obj.faces.size(), GL_UNSIGNED_INT, 0);
-    // ENDTODO
     vao_.release();
     shaderProgram_.release();
 }

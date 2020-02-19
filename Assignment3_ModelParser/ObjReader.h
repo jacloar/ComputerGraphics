@@ -14,6 +14,7 @@ public:
 
 	QVector<float> getVertices();
 	QVector<unsigned int> getFaces();
+	~ObjReader();
 
 private:
 	void readFile(std::string fileName);

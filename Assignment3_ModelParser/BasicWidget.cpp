@@ -87,6 +87,10 @@ void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent)
     else if (keyEvent->key() == Qt::Key_Q) {
         exit(0);
     }
+    else if (keyEvent->key() == Qt::Key_W) {
+        wireFrameShow = !wireFrameShow;
+        update();
+    }
     else {
         qDebug() << "You Pressed an unsupported Key!";
     }
@@ -161,6 +165,13 @@ void BasicWidget::paintGL()
 
     shaderProgram_.bind();
     vao_.bind();
+
+    if (wireFrameShow) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 
     if (showBunny) {
         b_vbo_.bind();

@@ -20,6 +20,11 @@ QVector<unsigned int> ObjReader::getFaces() {
 }
 
 
+ObjReader::~ObjReader() {
+
+}
+
+
 void ObjReader::readFile(std::string fileName) {
 
 	std::ifstream inFile;

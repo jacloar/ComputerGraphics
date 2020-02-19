@@ -24,6 +24,7 @@ private:
     ObjReader obj;
     
     boolean showBunny = true;
+    boolean wireFrameShow = false;
 
 protected:
     // Required interaction overrides

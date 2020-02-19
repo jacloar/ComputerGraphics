@@ -10,18 +10,7 @@ ObjReader::ObjReader() {
 }
 
 ObjReader::ObjReader(std::string fileName) {
-
 	readFile(fileName);
-	
-	std::cout << "verts: " << std::endl;
-	for (int i = 0; i < vertices.size(); i += 1) {
-		std::cout << vertices.at(i) << ", ";
-	}
-
-	std::cout << "faces: " << std::endl;
-	for (int i = 0; i < faces.size(); i += 1) {
-		std::cout << faces.at(i) << ", ";
-	}
 }
 
 QVector<float> ObjReader::getVertices() {

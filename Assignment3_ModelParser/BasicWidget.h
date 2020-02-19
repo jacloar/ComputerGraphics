@@ -18,9 +18,10 @@ private:
     QString fragmentShaderString() const;
     void createShader();
     QOpenGLVertexArrayObject vao_;
-    int shape = 6;
-
-    ObjReader obj;
+    
+    ObjReader bunny = ObjReader("../../objects/bunny_centered.obj");
+    ObjReader monkey = ObjReader("../../objects/monkey_centered.obj");
+    ObjReader obj = bunny;
 
 protected:
     // Required interaction overrides
@@ -43,5 +44,4 @@ public:
 
     // Make sure we have some size that makes sense.
     QSize sizeHint() const { return QSize(800, 600); }
-    void setObj(ObjReader r);
 };

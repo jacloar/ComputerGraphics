@@ -10,7 +10,9 @@ public:
 
 	QVector<float> vertices;
 	QVector<float> normals;
-	QVector<unsigned int> faces;
+	QVector<float> textures;
+	QVector<unsigned int> vertexIndices;
+	QVector<unsigned int> textureIndices;
 
 	QVector<float> getVertices();
 	QVector<unsigned int> getFaces();
@@ -21,4 +23,5 @@ private:
 	void readVertex(std::string line);
 	void readNormal(std::string line);
 	void readFace(std::string line);
+	void readTexture(std::string line);
 };

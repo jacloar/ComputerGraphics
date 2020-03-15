@@ -16,7 +16,7 @@ QVector<float> ObjReader::getVertices() {
 }
 
 QVector<unsigned int> ObjReader::getFaces() {
-	return faces;
+	return vertexIndices;
 }
 
 
@@ -41,6 +41,9 @@ void ObjReader::readFile(std::string fileName) {
 				if (line.at(0) == 'v') {
 					if (line.at(1) == 'n') {
 						readNormal(line);
+					}
+					else if (line.at(1) == 't') {
+						readTexture(line);
 					}
 					else if (line.at(1) == ' ') {
 						readVertex(line);
@@ -83,20 +86,36 @@ void ObjReader::readNormal(std::string line) {
 	normals.push_back(v3);
 }
 
+void ObjReader::readTexture(std::string line) {
+	float t1;
+	float t2;
+
+	sscanf(line.c_str(), "vt %f %f", &t1, &t2);
+
+	vertices.push_back(t1);
+	vertices.push_back(t2);
+}
+
 void ObjReader::readFace(std::string line) {
 	unsigned int v1;
-	unsigned int n1;
 	unsigned int v2;
-	unsigned int n2;
 	unsigned int v3;
+
+	unsigned int n1;
+	unsigned int n2;
 	unsigned int n3;
 
-	sscanf(line.c_str(), "f %d//%d %d//%d %d//%d", &v1, &n1, &v2, &n2, &v3, &n3);
+	unsigned int t1;
+	unsigned int t2;
+	unsigned int t3;
 
-	faces.push_back(v1 - 1);
-	//faces.push_back(n1);
-	faces.push_back(v2 - 1);
-	//faces.push_back(n2);
-	faces.push_back(v3 - 1);
-	//faces.push_back(n3);
+	sscanf(line.c_str(), "f %d/%d/%d %d/%d/%d %d/%d/%d", &v1, &t1, &n1, &v2, &t2, &n2, &v3, &t3, &n3);
+
+	vertexIndices.push_back(v1 - 1);
+	vertexIndices.push_back(v2 - 1);
+	vertexIndices.push_back(v3 - 1);
+
+	textureIndices.push_back(t1 - 1);
+	textureIndices.push_back(t2 - 1);
+	textureIndices.push_back(t3 - 1);
 }

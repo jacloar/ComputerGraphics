@@ -11,7 +11,7 @@ ObjReader::ObjReader(std::string fileName) {
 	readFile(fileName);
 }
 
-QVector<float> ObjReader::getVertices() {
+QVector<QVector3D> ObjReader::getVertices() {
 	return vertices;
 }
 
@@ -68,10 +68,7 @@ void ObjReader::readVertex(std::string line) {
 
 	sscanf(line.c_str(), "v %f %f %f", &v1, &v2, &v3);
 
-	vertices.push_back(v1);
-	vertices.push_back(v2);
-	vertices.push_back(v3);
-
+	vertices.push_back(QVector3D(v1, v2, v3));
 }
 
 void ObjReader::readNormal(std::string line) {
@@ -81,9 +78,7 @@ void ObjReader::readNormal(std::string line) {
 
 	sscanf(line.c_str(), "vn %f %f %f", &v1, &v2, &v3);
 
-	normals.push_back(v1);
-	normals.push_back(v2);
-	normals.push_back(v3);
+	normals.push_back(QVector3D(v1, v2, v3));
 }
 
 void ObjReader::readTexture(std::string line) {
@@ -92,8 +87,7 @@ void ObjReader::readTexture(std::string line) {
 
 	sscanf(line.c_str(), "vt %f %f", &t1, &t2);
 
-	vertices.push_back(t1);
-	vertices.push_back(t2);
+	textures.push_back(QVector2D(t1, t2));
 }
 
 void ObjReader::readFace(std::string line) {

@@ -5,6 +5,7 @@
 #include <QtOpenGL>
 
 #include "Renderable.h"
+#include "ObjReader.h"
 
 /**
  * This is just a basic OpenGL widget that will allow a change of background color.

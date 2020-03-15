@@ -31,6 +31,9 @@ protected:
 	// Create our shader and fix it up
 	void createShaders();
 
+	QString Renderable::vertexShaderString() const;
+	QString Renderable::fragmentShaderString() const;
+
 public:
 	Renderable();
 	virtual ~Renderable();

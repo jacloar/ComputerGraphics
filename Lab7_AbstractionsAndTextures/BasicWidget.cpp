@@ -55,9 +55,35 @@ void BasicWidget::initializeGL()
   // TODO:  Make sure to add texture coordinates to pass into the initialization of our renderable
   idx << 0 << 1 << 2 << 2 << 1 << 3;
 
+  texCoord << QVector2D(0.0, 1.0);
+  texCoord << QVector2D(1.0, 1.0);
+  texCoord << QVector2D(0.0, 0.0);
+  texCoord << QVector2D(1.0, 0.0);
+
   Renderable* ren = new Renderable();
   ren->init(pos, norm, texCoord, idx, texFile);
+
+  QVector<QVector3D> pos2;
+  pos2 << QVector3D(-1.5, -1.5, 0.0);
+  pos2 << QVector3D(-0.5, -1.5, 0.0);
+  pos2 << QVector3D(-1.5, -0.5, 0.0);
+  pos2 << QVector3D(-0.5, -0.5, 0.0);
+
+  Renderable* ren2 = new Renderable();
+  ren2->init(pos2, norm, texCoord, idx, texFile);
+
+  QVector<QVector3D> pos3;
+  pos3 << QVector3D(0.5, 0.5, 0.0);
+  pos3 << QVector3D(1.5, 0.5, 0.0);
+  pos3 << QVector3D(0.5, 1.5, 0.0);
+  pos3 << QVector3D(1.5, 1.5, 0.0);
+
+  Renderable* ren3 = new Renderable();
+  ren3->init(pos3, norm, texCoord, idx, texFile);
+
   renderables_.push_back(ren);
+  renderables_.push_back(ren2);
+  renderables_.push_back(ren3);
   glViewport(0, 0, width(), height());
   frameTimer_.start();
 }

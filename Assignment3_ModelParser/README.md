@@ -3,6 +3,7 @@
 <img align="right" src="./media/bunnyWireframe.png" alt="Stanford Bunny" width="400px"/>
 
 * Name and partners name(At most 1 partner for this Assignment): 
+
   Dan Muller and partner Jack Loar
 * How many hours did it take you to complete this Assignment? 
   approximately 6
@@ -12,6 +13,7 @@
   * Piazza
   * QOpenGL documentation
   * (tbd if any)
+
   
 ## Description
 

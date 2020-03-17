@@ -21,6 +21,7 @@ set(srcs
   App.cpp
   BasicWidget.cpp
   Renderable.cpp
+  ObjReader.cpp
 )
 
 add_executable(App

@@ -24,15 +24,44 @@ Renderable::~Renderable()
 	}
 }
 
+QString Renderable::vertexShaderString() const
+{
+	QString str =
+		"#version 330\n"
+		"layout(location = 0) in vec3 position;\n"
+		"layout(location = 1) in vec4 color;\n"
+		"out vec4 vertColor;\n"
+		"void main()\n"
+		"{\n"
+		"  gl_Position = vec4(position, 1.0);\n"
+		"  vertColor = color;\n"
+		"}\n";
+	return str;
+}
+
+QString Renderable::fragmentShaderString() const
+{
+	QString str =
+		"#version 330\n"
+		"out vec4 color;\n"
+		"void main()\n"
+		"{\n"
+		"  color = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
+		"}\n";
+	return str;
+}
+
 void Renderable::createShaders()
 {
-	QString vertexFilename = "../../vert.glsl";
-	bool ok = shader_.addShaderFromSourceFile(QOpenGLShader::Vertex, vertexFilename);
+	QOpenGLShader vert(QOpenGLShader::Vertex);
+	vert.compileSourceCode(vertexShaderString());
+	QOpenGLShader frag(QOpenGLShader::Fragment);
+	frag.compileSourceCode(fragmentShaderString());
+	bool ok = shader_.addShader(&vert);
 	if (!ok) {
 		qDebug() << shader_.log();
 	}
-	QString fragmentFilename = "../../frag.glsl";
-	ok = shader_.addShaderFromSourceFile(QOpenGLShader::Fragment, fragmentFilename);
+	ok = shader_.addShader(&frag);
 	if (!ok) {
 		qDebug() << shader_.log();
 	}
@@ -47,16 +76,18 @@ void Renderable::init(const QVector<QVector3D>& positions, const QVector<QVector
 	// NOTE:  We do not currently do anything with normals -- we just
 	// have it here for a later implementation!
 	// We need to make sure our sizes all work out ok.
+
+	/*
 	if (positions.size() != texCoords.size() ||
 		positions.size() != normals.size()) {
 		qDebug() << "[Renderable]::init() -- positions size mismatch with normals/texture coordinates";
 		return;
-	}
+	}*/
 
 	// Set our model matrix to identity
 	modelMatrix_.setToIdentity();
 	// Load our texture.
-	texture_.setData(QImage(textureFile));
+	//texture_.setData(QImage(textureFile));
 
 	// set our number of trianges.
 	numTris_ = indexes.size() / 3;
@@ -64,7 +95,7 @@ void Renderable::init(const QVector<QVector3D>& positions, const QVector<QVector
 	// num verts (used to size our vbo)
 	int numVerts = positions.size();
 	vertexSize_ = 3 + 2;  // Position + texCoord
-	int numVBOEntries = numVerts * vertexSize_;
+	int numVBOEntries = numVerts; //* vertexSize_;
 
 	// Setup our shader.
 	createShaders();
@@ -82,8 +113,8 @@ void Renderable::init(const QVector<QVector3D>& positions, const QVector<QVector
 		data[i * vertexSize_ + 0] = positions.at(i).x();
 		data[i * vertexSize_ + 1] = positions.at(i).y();
 		data[i * vertexSize_ + 2] = positions.at(i).z();
-		data[i * vertexSize_ + 3] = texCoords.at(i).x();
-		data[i * vertexSize_ + 4] = texCoords.at(i).y();
+		//data[i * vertexSize_ + 3] = texCoords.at(i).x();
+		//data[i * vertexSize_ + 4] = texCoords.at(i).y();
 	}
 	vbo_.allocate(data, numVBOEntries * sizeof(float));
 	delete[] data;
@@ -93,18 +124,21 @@ void Renderable::init(const QVector<QVector3D>& positions, const QVector<QVector
 	ibo_.bind();
 	ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
 	// create a temporary array for our indexes
-	unsigned int* idxAr = new unsigned int[indexes.size()];
+	/*unsigned int* idxAr = new unsigned int[indexes.size()];
 	for (int i = 0; i < indexes.size(); ++i) {
 		idxAr[i] = indexes.at(i);
-	}
-	ibo_.allocate(idxAr, indexes.size() * sizeof(unsigned int));
-	delete[] idxAr;
+	}*/
+	ibo_.allocate(indexes.data(), indexes.size() * sizeof(GL_INT));
+	//ibo_.allocate(idxAr, indexes.size() * sizeof(unsigned int));
+	//delete[] idxAr;
+
+	shader_.bind();
 
 	// Make sure we setup our shader inputs properly
 	shader_.enableAttributeArray(0);
 	shader_.setAttributeBuffer(0, GL_FLOAT, 0, 3, vertexSize_ * sizeof(float));
-	shader_.enableAttributeArray(1);
-	shader_.setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(float), 2, vertexSize_ * sizeof(float));
+	//shader_.enableAttributeArray(1);
+	//shader_.setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(float), 2, vertexSize_ * sizeof(float));
 
 	// Release our vao and THEN release our buffers.
 	vao_.release();

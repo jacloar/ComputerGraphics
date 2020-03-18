@@ -30,10 +30,15 @@ QString Renderable::vertexShaderString() const
 		"#version 330\n"
 		"layout(location = 0) in vec3 position;\n"
 		"layout(location = 1) in vec4 color;\n"
+
+		"uniform mat4 modelMatrix;\n"
+		"uniform mat4 viewMatrix;\n"
+		"uniform mat4 projectionMatrix;\n"
+
 		"out vec4 vertColor;\n"
 		"void main()\n"
 		"{\n"
-		"  gl_Position = vec4(position, 1.0);\n"
+		"  gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);\n"
 		"  vertColor = color;\n"
 		"}\n";
 	return str;
@@ -71,7 +76,7 @@ void Renderable::createShaders()
 	}
 }
 
-void Renderable::init(const QVector<QVector3D>& positions, const QVector<QVector3D>& normals, const QVector<QVector2D>& texCoords, const QVector<unsigned int>& indexes, const QString& textureFile)
+void Renderable::init(const ObjReader obj, const QString& textureFile)
 {
 	// NOTE:  We do not currently do anything with normals -- we just
 	// have it here for a later implementation!
@@ -84,18 +89,26 @@ void Renderable::init(const QVector<QVector3D>& positions, const QVector<QVector
 		return;
 	}*/
 
+	const QVector<QVector3D>& positions = obj.vertices;
+	const QVector<QVector3D>& normals = obj.normals;
+	const QVector<QVector2D>& texCoords = obj.textures;
+	const QVector<unsigned int>& indexes = obj.vertexIndices;
+
+	this->obj = obj;
+
 	// Set our model matrix to identity
 	modelMatrix_.setToIdentity();
+
 	// Load our texture.
-	//texture_.setData(QImage(textureFile));
+	texture_.setData(QImage(textureFile));
 
 	// set our number of trianges.
 	numTris_ = indexes.size() / 3;
 
 	// num verts (used to size our vbo)
 	int numVerts = positions.size();
-	vertexSize_ = 3 + 2;  // Position + texCoord
-	int numVBOEntries = numVerts; //* vertexSize_;
+	vertexSize_ = 3; //+ 2;  // Position + texCoord
+	int numVBOEntries = numVerts * vertexSize_;
 
 	// Setup our shader.
 	createShaders();
@@ -107,6 +120,7 @@ void Renderable::init(const QVector<QVector3D>& positions, const QVector<QVector
 	vbo_.create();
 	vbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
 	vbo_.bind();
+
 	// Create a temporary data array
 	float* data = new float[numVBOEntries];
 	for (int i = 0; i < numVerts; ++i) {
@@ -124,13 +138,12 @@ void Renderable::init(const QVector<QVector3D>& positions, const QVector<QVector
 	ibo_.bind();
 	ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
 	// create a temporary array for our indexes
-	/*unsigned int* idxAr = new unsigned int[indexes.size()];
+	unsigned int* idxAr = new unsigned int[indexes.size()];
 	for (int i = 0; i < indexes.size(); ++i) {
 		idxAr[i] = indexes.at(i);
-	}*/
-	ibo_.allocate(indexes.data(), indexes.size() * sizeof(GL_INT));
-	//ibo_.allocate(idxAr, indexes.size() * sizeof(unsigned int));
-	//delete[] idxAr;
+	}
+	ibo_.allocate(idxAr, indexes.size() * sizeof(unsigned int));
+	delete[] idxAr;
 
 	shader_.bind();
 
@@ -142,6 +155,8 @@ void Renderable::init(const QVector<QVector3D>& positions, const QVector<QVector
 
 	// Release our vao and THEN release our buffers.
 	vao_.release();
+
+	shader_.release();
 	vbo_.release();
 	ibo_.release();
 }
@@ -176,7 +191,7 @@ void Renderable::draw(const QMatrix4x4& view, const QMatrix4x4& projection)
 
 	vao_.bind();
 	texture_.bind();
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, obj.vertexIndices.size(), GL_UNSIGNED_INT, 0);
 	texture_.release();
 	vao_.release();
 	shader_.release();

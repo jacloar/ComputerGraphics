@@ -103,13 +103,15 @@ void ObjReader::readFace(std::string line) {
 	unsigned int t2;
 	unsigned int t3;
 
-	sscanf(line.c_str(), "f %d/%d/%d %d/%d/%d %d/%d/%d", &v1, &t1, &n1, &v2, &t2, &n2, &v3, &t3, &n3);
+	sscanf(line.c_str(), "f %d/%d/%*d %d/%d/%*d %d/%d/%*d", &v1, &t1, &v2, &t2, &v3, &t3);
+	//sscanf(line.c_str(), "f %d//%*d %d//%*d %d//%*d", &v1, &v2, &v3);
 
 	vertexIndices.push_back(v1 - 1);
 	vertexIndices.push_back(v2 - 1);
 	vertexIndices.push_back(v3 - 1);
-
+	
 	textureIndices.push_back(t1 - 1);
 	textureIndices.push_back(t2 - 1);
 	textureIndices.push_back(t3 - 1);
+	
 }

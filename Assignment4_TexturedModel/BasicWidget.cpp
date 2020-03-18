@@ -39,7 +39,7 @@ void BasicWidget::initializeGL()
 
   qDebug() << QDir::currentPath();
 
-  ObjReader obj("../../objects/bunny_centered.obj");
+  ObjReader obj("../../objects/house/house_obj.obj");
 
   QVector<QVector3D> pos = obj.vertices;
   QVector<QVector3D> norm = obj.normals;
@@ -47,7 +47,8 @@ void BasicWidget::initializeGL()
   QVector<unsigned int> idx = obj.vertexIndices;
 
   Renderable* ren = new Renderable();
-  ren->init(pos, norm, texCoord, idx, "../../objects/house/house_spec.ppm");
+  ren->init(obj, "../../objects/house/house_diffuse.ppm");
+  ren->setRotationAxis(QVector3D(0., 1., 0.));
 
   renderables_.push_back(ren);
   glViewport(0, 0, width(), height());
@@ -67,13 +68,15 @@ void BasicWidget::resizeGL(int w, int h)
             });
         logger_.startLogging();
     }
-  glViewport(0, 0, w, h);
+
   view_.setToIdentity();
-  view_.lookAt(QVector3D(0.0f, 0.0f, 2.0f),
+  view_.lookAt(QVector3D(0.0f, 0.0f, 4.0f),
       QVector3D(0.0f, 0.0f, 0.0f),
       QVector3D(0.0f, 1.0f, 0.0f));
+
   projection_.setToIdentity();
   projection_.perspective(70.f, (float)w/(float)h, 0.001, 1000.0);
+
   glViewport(0, 0, w, h);
 }
 

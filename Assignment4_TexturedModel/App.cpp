@@ -1,14 +1,19 @@
 #include "App.h"
 
 #include "BasicWidget.h"
+#include <iostream>
 
-App::App(QWidget* parent) : QMainWindow(parent)
+App::App(std::string objF, QWidget* parent) : QMainWindow(parent)
 {
+
+  objFile = objF;
   buildGui();
 }
 
 App::~App()
 {}
+
+
 
 void App::buildGui()
 {
@@ -17,7 +22,12 @@ void App::buildGui()
   QMenu* file = menu->addMenu("File");
   QAction* exit = file->addAction("Quit", [this]() {close();});
 
+
+  //std::cout << "IN app, objfile = " << objFile << std::endl;
+  
+
   // Our basic widget.
-  BasicWidget* widget = new BasicWidget(this);
+  BasicWidget* widget = new BasicWidget(objFile, this);
+  
   setCentralWidget(widget);
 }

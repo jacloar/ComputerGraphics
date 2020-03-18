@@ -1,9 +1,13 @@
 #include "BasicWidget.h"
+#include <iostream>
 
 //////////////////////////////////////////////////////////////////////
 // Publics
-BasicWidget::BasicWidget(QWidget* parent) : QOpenGLWidget(parent), logger_(this)
+BasicWidget::BasicWidget(std::string of, QWidget* parent) : QOpenGLWidget(parent), logger_(this)
 {
+
+   objFile = of;
+   //std::cout << "In BasicWidget constructor, objfile = " << objFile << std::endl;
   setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -28,6 +32,15 @@ void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent)
   } else if (keyEvent->key() == Qt::Key_Right) {
     qDebug() << "Right Arrow Pressed";
     update();  // We call update after we handle a key press to trigger a redraw when we are ready
+  }
+  else if (keyEvent->key() == Qt::Key_Q) {
+      qDebug() << "pressed q, exiting";
+      exit(0);
+      update();
+  } else if (keyEvent->key() == Qt::Key_W) {
+      qDebug() << "pressed w, switch wireframe mode";
+      showWire = !showWire;
+      update();
   } else {
     qDebug() << "You Pressed an unsupported Key!";
   }
@@ -39,12 +52,21 @@ void BasicWidget::initializeGL()
 
   qDebug() << QDir::currentPath();
 
-  ObjReader obj("../../objects/house/house_obj.obj");
+  //ObjReader obj("../../objects/house/house_obj.obj");
+  ObjReader obj(objFile);
+
+  //std::cout << "BW initializeGL" << objFile << std::endl;
+
 
   QVector<QVector3D> pos = obj.vertices;
   QVector<QVector3D> norm = obj.normals;
   QVector<QVector2D> texCoord = obj.textures;
   QVector<unsigned int> idx = obj.vertexIndices;
+
+  
+  //QVector<unsigned int> t = obj.textureIndices;
+
+ 
 
   Renderable* ren = new Renderable();
   ren->init(obj, "../../objects/house/house_diffuse.ppm");
@@ -54,6 +76,9 @@ void BasicWidget::initializeGL()
   glViewport(0, 0, width(), height());
   frameTimer_.start();
 }
+
+
+
 
 void BasicWidget::resizeGL(int w, int h)
 {
@@ -86,8 +111,13 @@ void BasicWidget::paintGL()
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
 
+ 
   glClearColor(0.f, 0.f, 0.f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+  glPolygonMode(GL_FRONT, showWire ? GL_FILL : GL_LINE);
+
 
   for (auto renderable : renderables_) {
       renderable->update(msSinceRestart);

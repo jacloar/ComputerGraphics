@@ -92,9 +92,15 @@ void Renderable::init(const ObjReader obj, const QString& textureFile)
 	const QVector<QVector3D>& positions = obj.vertices;
 	const QVector<QVector3D>& normals = obj.normals;
 	const QVector<QVector2D>& texCoords = obj.textures;
+	
+	
+	//represent faces
 	const QVector<unsigned int>& indexes = obj.vertexIndices;
+	//const QVector<unsigned int> textureIndices = obj.textureIndices;
+
 
 	this->obj = obj;
+
 
 	// Set our model matrix to identity
 	modelMatrix_.setToIdentity();
@@ -102,12 +108,15 @@ void Renderable::init(const ObjReader obj, const QString& textureFile)
 	// Load our texture.
 	texture_.setData(QImage(textureFile));
 
-	// set our number of trianges.
-	numTris_ = indexes.size() / 3;
+
+	//number of triangles
+	int numT = indexes.size() / 3;
+
+
 
 	// num verts (used to size our vbo)
 	int numVerts = positions.size();
-	vertexSize_ = 3; //+ 2;  // Position + texCoord
+	vertexSize_ = 3 + 2;  // Position + texCoord
 	int numVBOEntries = numVerts * vertexSize_;
 
 	// Setup our shader.
@@ -127,8 +136,8 @@ void Renderable::init(const ObjReader obj, const QString& textureFile)
 		data[i * vertexSize_ + 0] = positions.at(i).x();
 		data[i * vertexSize_ + 1] = positions.at(i).y();
 		data[i * vertexSize_ + 2] = positions.at(i).z();
-		//data[i * vertexSize_ + 3] = texCoords.at(i).x();
-		//data[i * vertexSize_ + 4] = texCoords.at(i).y();
+		data[i * vertexSize_ + 3] = texCoords.at(i).x();
+		data[i * vertexSize_ + 4] = texCoords.at(i).y();
 	}
 	vbo_.allocate(data, numVBOEntries * sizeof(float));
 	delete[] data;
@@ -150,8 +159,8 @@ void Renderable::init(const ObjReader obj, const QString& textureFile)
 	// Make sure we setup our shader inputs properly
 	shader_.enableAttributeArray(0);
 	shader_.setAttributeBuffer(0, GL_FLOAT, 0, 3, vertexSize_ * sizeof(float));
-	//shader_.enableAttributeArray(1);
-	//shader_.setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(float), 2, vertexSize_ * sizeof(float));
+	shader_.enableAttributeArray(1);
+	shader_.setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(float), 2, vertexSize_ * sizeof(float));
 
 	// Release our vao and THEN release our buffers.
 	vao_.release();
@@ -191,7 +200,7 @@ void Renderable::draw(const QMatrix4x4& view, const QMatrix4x4& projection)
 
 	vao_.bind();
 	texture_.bind();
-	glDrawElements(GL_TRIANGLES, obj.vertexIndices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, obj.textureIndices.size(), GL_UNSIGNED_INT, 0);
 	texture_.release();
 	vao_.release();
 	shader_.release();

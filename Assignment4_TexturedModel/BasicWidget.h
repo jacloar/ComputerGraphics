@@ -15,6 +15,10 @@ class BasicWidget : public QOpenGLWidget, protected QOpenGLFunctions
   Q_OBJECT
 
 private:
+   
+  boolean showWire = true; 
+
+
   QMatrix4x4 model_;
   QMatrix4x4 view_;
   QMatrix4x4 projection_;
@@ -26,6 +30,7 @@ private:
   QOpenGLDebugLogger logger_;
 
 protected:
+    std::string objFile;
   // Required interaction overrides
   void keyReleaseEvent(QKeyEvent* keyEvent) override;
 
@@ -35,7 +40,7 @@ protected:
   void paintGL() override;
   
 public:
-  BasicWidget(QWidget* parent=nullptr);
+  BasicWidget(std::string of, QWidget* parent=nullptr);
   virtual ~BasicWidget();
   
   // Make sure we have some size that makes sense.

@@ -35,7 +35,7 @@ void ObjReader::readFile(std::string fileName) {
 	std::ifstream inFile;
 	inFile.open(fileName.c_str());
 
-	bool seeanMtl = false;
+	bool seenMtl = false;
 
 	if (inFile.is_open()) {
 		while (!inFile.eof()) {
@@ -46,8 +46,9 @@ void ObjReader::readFile(std::string fileName) {
 			if (line.length() > 3) {
 
 				//parse material file, first boolean for performance 
-				if (!seeanMtl && line.substr(0, 6) == "mtllib") {
+				if (!seenMtl && line.substr(0, 6) == "mtllib") {
 					readMtl(line, fileName);
+					seenMtl = true;
 				}
 				
 

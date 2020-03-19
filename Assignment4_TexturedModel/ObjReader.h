@@ -6,6 +6,9 @@
 class ObjReader {
 
 public:
+
+	std::string ppmFile;
+
 	ObjReader();
 	ObjReader(std::string fileName);
 
@@ -22,6 +25,9 @@ public:
 	~ObjReader();
 
 private:
+
+	void readMtl(std::string line, std::string fileName);
+
 	void readFile(std::string fileName);
 	void readVertex(std::string line);
 	void readNormal(std::string line);

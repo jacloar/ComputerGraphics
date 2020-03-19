@@ -4,6 +4,9 @@
 #include <fstream>
 #include <stdio.h>
 #include <string.h>
+#include <string>
+#include <algorithm>
+
 
 ObjReader::ObjReader() {}
 
@@ -32,6 +35,8 @@ void ObjReader::readFile(std::string fileName) {
 	std::ifstream inFile;
 	inFile.open(fileName.c_str());
 
+	bool seeanMtl = false;
+
 	if (inFile.is_open()) {
 		while (!inFile.eof()) {
 
@@ -39,6 +44,12 @@ void ObjReader::readFile(std::string fileName) {
 			getline(inFile, line);
 
 			if (line.length() > 3) {
+
+				//parse material file, first boolean for performance 
+				if (!seeanMtl && line.substr(0, 6) == "mtllib") {
+					readMtl(line, fileName);
+				}
+				
 
 				if (line.at(0) == 'v') {
 					if (line.at(1) == 'n') {
@@ -56,12 +67,59 @@ void ObjReader::readFile(std::string fileName) {
 				if (line.at(0) == 'f' && line.at(1) == ' ') {
 					readFace(line);
 				}
+
+				
 			}
 
 		}
 		inFile.close();
 	}
 }
+
+
+
+void ObjReader::readMtl(std::string line, std::string fileName) {
+
+
+	std::string s (fileName);
+
+	s = s.substr(0, s.find_last_of("\\/")); //get directory of .obj file
+
+//    std::cout << "reading mtl, path =  " << s << std::endl;
+
+	std::string fullPath = s + "/" + line.substr(7, line.length()); //fulll file path of .mtl file
+	//std::cout << "full mtl path = " << fullPath << std::endl;
+	
+	std::ifstream mtlFile; 
+	mtlFile.open(fullPath);
+	std::string gline;
+	
+   std::string ppmTemp = "";
+
+	if (mtlFile.is_open()) {
+		while (!mtlFile.eof()) {
+			getline(mtlFile, gline);
+			
+			if (gline.substr(0, 6) == "map_Kd"){ 
+				ppmTemp = gline.substr(7, gline.length());
+				break;
+			}
+
+		}
+	}
+
+	ppmTemp = s + "/" + ppmTemp;
+
+	ppmFile = ppmTemp;
+
+	std::cout << "ppm file now = " << ppmFile << std::endl;
+
+	mtlFile.close();
+}
+
+
+
+
 
 void ObjReader::readVertex(std::string line) {
 	float v1;
@@ -116,6 +174,7 @@ void ObjReader::readFace(std::string line) {
 
 
 	//try to find a similar ( = same fo all attributes ) vertex
+
 
 
 	vertexIndices.push_back(v1 - 1);

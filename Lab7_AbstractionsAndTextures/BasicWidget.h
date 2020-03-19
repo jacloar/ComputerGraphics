@@ -32,6 +32,8 @@ protected:
   void initializeGL() override;
   void resizeGL(int w, int h) override;
   void paintGL() override;
+
+  Renderable* makeRenderable(QVector3D off);
   
 public:
   BasicWidget(QWidget* parent=nullptr);

@@ -22,6 +22,8 @@ private:
   QOpenGLVertexArrayObject vao_;
   int shape = 6;
 
+  int sp = 6;
+
 protected:
   // Required interaction overrides
   void keyReleaseEvent(QKeyEvent* keyEvent) override;

@@ -5,11 +5,18 @@
 #include <QtCore>
 #include <QtGui>
 #include <QtOpenGL>
+#include <iostream>
 
 // TODO:  you have to include whatever application-specific code there is here.  This should be
 // a subclass of QMainWindow!
 
+#include "App.h"
+
 int main(int argc, char** argv) {
+
+
+    std::string objFile = argv[1];
+
   QApplication a(argc, argv);
   QString appDir = a.applicationDirPath();
   QDir::setCurrent(appDir);
@@ -22,7 +29,9 @@ int main(int argc, char** argv) {
   QSurfaceFormat::setDefaultFormat(fmt);
 
   // TODO:  Replace the following 3 lines with whatever you need to create, show, and execute your application
-  //Application app;
-  //app.show();
-  //return QApplication::exec();
+  //std::cout << "In main, objfile = " << objFile << std::endl;
+
+  App app(objFile);
+  app.show();
+  return QApplication::exec();
 }

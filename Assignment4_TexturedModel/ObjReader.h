@@ -13,6 +13,7 @@ public:
 	QVector<QVector3D> normals;
 	QVector<QVector2D> textures;
 
+	//represents faces (indices of vertex indices and texture indices
 	QVector<unsigned int> vertexIndices;
 	QVector<unsigned int> textureIndices;
 

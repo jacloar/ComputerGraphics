@@ -27,6 +27,8 @@ ObjReader::~ObjReader() {
 
 void ObjReader::readFile(std::string fileName) {
 
+
+
 	std::ifstream inFile;
 	inFile.open(fileName.c_str());
 
@@ -91,20 +93,30 @@ void ObjReader::readTexture(std::string line) {
 }
 
 void ObjReader::readFace(std::string line) {
+	//vertex one, two, and three
 	unsigned int v1;
 	unsigned int v2;
 	unsigned int v3;
 
-	unsigned int n1;
-	unsigned int n2;
-	unsigned int n3;
 
+	//texture indicies one, two, three
 	unsigned int t1;
 	unsigned int t2;
 	unsigned int t3;
 
+
+	//normal indicies one, two, three
+	unsigned int n1;
+	unsigned int n2;
+	unsigned int n3;
+
+
 	sscanf(line.c_str(), "f %d/%d/%*d %d/%d/%*d %d/%d/%*d", &v1, &t1, &v2, &t2, &v3, &t3);
 	//sscanf(line.c_str(), "f %d//%*d %d//%*d %d//%*d", &v1, &v2, &v3);
+
+
+	//try to find a similar ( = same fo all attributes ) vertex
+
 
 	vertexIndices.push_back(v1 - 1);
 	vertexIndices.push_back(v2 - 1);

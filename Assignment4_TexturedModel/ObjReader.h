@@ -17,8 +17,11 @@ public:
 	QVector<QVector2D> textures;
 
 	//represents faces (indices of vertex indices and texture indices
-	QVector<unsigned int> vertexIndices;
-	QVector<unsigned int> textureIndices;
+	QVector<unsigned int> vertexIndexes;
+	QVector<unsigned int> textureIndexes;
+
+	QVector<float> data;
+	QVector<unsigned int> indexes;
 
 	QVector<QVector3D> getVertices();
 	QVector<unsigned int> getFaces();

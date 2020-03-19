@@ -16,7 +16,7 @@ class BasicWidget : public QOpenGLWidget, protected QOpenGLFunctions
 
 private:
    
-  boolean showWire = true; 
+  boolean showWire = false; 
 
 
   QMatrix4x4 model_;

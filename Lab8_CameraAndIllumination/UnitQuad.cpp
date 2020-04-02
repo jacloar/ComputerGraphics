@@ -48,14 +48,29 @@ void UnitQuad::update(const qint64 msSinceLastFrame)
     newPos.setX(0.5);
     // TODO:  Understand how the light gets initialized/setup.
     shader_.bind();
-    shader_.setUniformValue("pointLights[0].color", 1.0f, 1.0f, 1.0f);
+    shader_.setUniformValue("pointLights[0].color", 1.0f, 0.0f, 0.0f);
     shader_.setUniformValue("pointLights[0].position", newPos);
-
     shader_.setUniformValue("pointLights[0].ambientIntensity", 0.5f);
     shader_.setUniformValue("pointLights[0].specularStrength", 0.5f);
     shader_.setUniformValue("pointLights[0].constant", 1.0f);
     shader_.setUniformValue("pointLights[0].linear", 0.09f);
     shader_.setUniformValue("pointLights[0].quadratic", 0.032f);
+
+    shader_.setUniformValue("pointLights[1].color", 0.0f, 1.0f, 0.0f);
+    shader_.setUniformValue("pointLights[1].position", QVector3D(1.0f, 0.0f, 0.0f));
+    shader_.setUniformValue("pointLights[1].ambientIntensity", 0.75f);
+    shader_.setUniformValue("pointLights[1].specularStrength", 0.5f);
+    shader_.setUniformValue("pointLights[1].constant", 1.0f);
+    shader_.setUniformValue("pointLights[1].linear", 0.09f);
+    shader_.setUniformValue("pointLights[1].quadratic", 0.032f);
+
+    shader_.setUniformValue("pointLights[2].color", 0.0f, 0.0f, 1.0f);
+    shader_.setUniformValue("pointLights[2].position", QVector3D(0.0f, 1.0f, 0.0f));
+    shader_.setUniformValue("pointLights[2].ambientIntensity", 0.75f);
+    shader_.setUniformValue("pointLights[2].specularStrength", 0.5f);
+    shader_.setUniformValue("pointLights[2].constant", 1.0f);
+    shader_.setUniformValue("pointLights[2].linear", 0.09f);
+    shader_.setUniformValue("pointLights[2].quadratic", 0.032f);
 
     shader_.release();
 }

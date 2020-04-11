@@ -197,6 +197,7 @@ void BasicWidget::initializeGL()
 
 void BasicWidget::resizeGL(int w, int h)
 {
+    //QOpenGLFramebufferObject fbo_(size(), QOpenGLFramebufferObject::CombinedDepthStencil);
     if (!logger_.isLogging()) {
         logger_.initialize();
         // Setup the logger for real-time messaging
@@ -218,12 +219,12 @@ void BasicWidget::paintGL()
 
   // Create an FBO the same size as our window.
   // TODO:  This is wasteful -- do we really NEED to create a new FBO every frame?!
-  QOpenGLFramebufferObject fbo(size(), QOpenGLFramebufferObject::CombinedDepthStencil);
+  QOpenGLFramebufferObject fbo_(size(), QOpenGLFramebufferObject::CombinedDepthStencil);
 
   // Bind our FBO.
   // This make our current render target the framebuffer that we have bound.  We will not
   // be seeing any imagery from now on!
-  fbo.bind();
+  fbo_.bind();
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
@@ -242,7 +243,7 @@ void BasicWidget::paintGL()
   }
 
   // Release our FBO.
-  fbo.release();
+  fbo_.release();
 
   // Reset our context so we can draw the offscreen rendered scene
   // From now on, we are drawing to the "normal" framebuffer.  We will see in our window
@@ -257,7 +258,7 @@ void BasicWidget::paintGL()
   // TODO -- Note, Qt doesn't expose the textures an QOpenGLFrameBufferObject stores directly
   // instead, it provides a method to get the textureID that it used to render to.
   // We now want to bind it and use it to render our screen-sized quad
-  GLuint fboTextureId = fbo.texture();
+  GLuint fboTextureId = fbo_.texture();
   shader_.bind();
   // Our scene is very simple... we just set all of our matrices to identity
   QMatrix4x4 id;

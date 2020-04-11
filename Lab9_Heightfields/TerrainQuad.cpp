@@ -26,6 +26,7 @@ void TerrainQuad::init(const QString& textureFile)
 
     // TODO:  You may need to change the path here.
     QImage heightImage("../../terrain2.ppm");
+    float scale = heightImage.width();
 
     unsigned int curIdx = 0;
     // Populate our grid
@@ -34,9 +35,8 @@ void TerrainQuad::init(const QString& textureFile)
             // compute our top coordinate
             float z = r * rowStep;
             float x = c * colStep;
-            // TODO - Before changing anything in the shaders, we can get heightmapping
-            // to work by changing this y coordinate.  Implement this now to create a heightmap!
-            float y = 0.0;
+            // float y = heightImage.pixelColor(z * (scale - 1), x * (scale - 1)).red() / scale;
+            float y = 0;
             // Be explicit about our texture coords
             float u = z;
             float v = x;
@@ -105,25 +105,25 @@ void TerrainQuad::draw(const QMatrix4x4& world, const QMatrix4x4& view, const QM
     // TODO - After seeing the initial heightmap by querying in C++ the height image
     // uncommment these lines to change implementations to use the vertex shader!
     // We bind our height texture at Texture Unit 0
-//    f.glActiveTexture(GL_TEXTURE0);
-//    heightTexture_.bind();
+    f.glActiveTexture(GL_TEXTURE0);
+    heightTexture_.bind();
 
     // And our color texture at Texture Unit 1.
-//    f.glActiveTexture(GL_TEXTURE1);
+    f.glActiveTexture(GL_TEXTURE1);
     texture_.bind();
 
     // Setup our shader uniforms for multiple textures.  Make sure we use the correct
     // texture units as defined above!
     // TODO - Uncomment these lines when youa re ready to move from C++ implementation to
     // the GPU shader implementation.
-//    shader_.setUniformValue("tex", GL_TEXTURE0);
-//    shader_.setUniformValue("colorTex", GL_TEXTURE1 - GL_TEXTURE0);
+    shader_.setUniformValue("tex", GL_TEXTURE0);
+    shader_.setUniformValue("colorTex", GL_TEXTURE1 - GL_TEXTURE0);
     for (int s = 0; s < numStrips_; ++s) {
-        // TODO:  Draw the correct number of triangle strips using glDrawElements
+        glDrawElements(GL_TRIANGLE_STRIP, numIdxPerStrip_, GL_UNSIGNED_INT, (const GLvoid*)(s * numIdxPerStrip_ * sizeof(unsigned int)));
     }
-//    heightTexture_.release();
+    heightTexture_.release();
     texture_.release();
-//    f.glActiveTexture(GL_TEXTURE0);
+    f.glActiveTexture(GL_TEXTURE0);
     vao_.release();
     shader_.release();
 }

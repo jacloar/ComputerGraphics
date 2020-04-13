@@ -3,16 +3,16 @@
 <img align="right" src="./media/lab.png" width="400px" alt="picture">
 
 
-*TODO*: Please edit the following information in your assignment
 
 * Name and partners name(At most 1 partner for this Assignment): 
+    - Daniel Muller and Partner Jack Loar
 * How many hours did it take you to complete this Assignment? 
+    - 8 hours
+	- As described in the instructions below, using brick wall lab 
+	as starter code to for this normal-map assignment
 * Did you collaborate or share ideas with any other students/TAs/Professors? 
 * Did you use any external resources? 
-  * (tbd if any)
-  * (tbd if any)
-  * (tbd if any)
-* (Optional) What was the most interesting part of the assignment? How would you improve this assignment?
+  * learnopengl.com
   
 ## Description
 

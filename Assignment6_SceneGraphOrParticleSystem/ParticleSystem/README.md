@@ -2,8 +2,10 @@
 
 *TODO*: Please edit the following information in your assignment
 
-* Name and partners name(At most 1 partner for this Assignment): 
+* Name and partners name(At most 1 partner for this Assignment):
+  * Jack Loar and Dan Muller
 * How many hours did it take you to complete this Assignment? 
+  * About 3 or 4
 * Did you collaborate or share ideas with any other students/TAs/Professors? 
 * Did you use any external resources? 
   * (tbd if any)
@@ -106,6 +108,12 @@ public:
 
 In a few sentences why is our approach of keeping a pointer to the
 geometry to be drawn an optimization? Note: You can learn more about [instancing](https://learnopengl.com/Advanced-OpenGL/Instancing).
+
+We only have one copy of the geometry, so we do not need to write to the GPU every 
+time we want to draw a new particle. This saves time and computation as writing to
+the GPU is expensive, and in this case, doing so would be incredibly redundant. We
+can still draw the particle in multiple locations, so our scene appears exactly the
+same as it would otherwise.
   
 **Answer here**: *Your answer here*
   
